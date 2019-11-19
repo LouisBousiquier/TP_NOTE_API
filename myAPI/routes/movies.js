@@ -11,17 +11,37 @@ let port =8080;
 
 let movies = [{
     name: "Forrest Gump",
-    id: 0
+    id: "0"
 }];
 
 //GET
 router.get('/', (req,res)=>{
     res.status(200).json({movies})
-})
+});
+//get by id
+router.get('/:id',(req,res)=>{
+    const { id } = req.params;
+    const name=_.find(movies, ["id",id]);
+    res.status(200).json({
+        message:'movie found!',
+        name
+    });
+});
 
-router.use(port,()=>{
-    console.log('serveur ok')
-})
+router.put('/', (req,res)=>{
+    //get data from request
+    const {name}=req.body;
+    //creat new id
+    const id= _.uniqueId();
+    // insert in array
+    movies.push({name, id});
+    //return message
+    res.json({
+        message: `just added ${id}`,
+        name: {name,id}
+    });
+
+});
 
 /*
 /// PUT
