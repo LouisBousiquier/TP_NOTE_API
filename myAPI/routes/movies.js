@@ -1,10 +1,11 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+//var router = express.Router();
 
 //const hostname ="localhost";
 //const port = 3000;
 
-//const app=express();
+let app=express();
+let port =8080;
 
 //Creat database
 
@@ -13,15 +14,24 @@ let movies =[{
     id: 0
 }];
 
-/* GET*/
+app.get('/', function(req,res){
+    res.status(200).json({movies})
+})
+
+app.listen(port,()=> {
+    console.log('le serveur foctionne')
+})
+/*
+// GET
 router.get('/', (req,res)=>{
     res.status(200).json({movies});
 });
 
-/* PUT */
-router.put('/new', function(req,res, next){
+/// PUT 
+router.put('/', function(req,res, next){
     res.send('respond with a resource')
 });
+*/
 
 /*
 /// PUT
@@ -31,4 +41,4 @@ app.put('/',(req,res)=>{
         data: "this is a put"
     });
 });*/
-module.exports =router;
+//module.exports =router;
