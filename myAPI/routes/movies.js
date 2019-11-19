@@ -1,36 +1,43 @@
 const express = require('express');
 const router = express.Router();
 
+var _ = require('lodash');
+
 //const hostname ="localhost";
 //const port = 3000;
 
 //let app=express();
-let port =8080;
+//let port =8080;
 
 //Creat database
 
 let movies = [{
     name: "Forrest Gump",
     id: "0"
+},
+{
+    name:"rpie",
+    id:"1"
 }];
 
 //GET
 router.get('/', (req,res)=>{
     res.status(200).json({movies})
 });
+
 //get by id
 router.get('/:id',(req,res)=>{
     const { id } = req.params;
-    const name=_.find(movies, ["id",id]);
+    const elem= _.find(movies, ["id",id]);
     res.status(200).json({
         message:'movie found!',
-        name
+        elem
     });
 });
 
 router.put('/', (req,res)=>{
     //get data from request
-    const {name}=req.body;
+    const name=req.body;
     //creat new id
     const id= _.uniqueId();
     // insert in array
