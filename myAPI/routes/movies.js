@@ -28,28 +28,51 @@ router.get('/', (req,res)=>{
 //get by id
 router.get('/:id',(req,res)=>{
     const { id } = req.params;
-    const elem= _.find(movies, ["id",id]);
+    const movie= _.find(movies, ["id",id]);
     res.status(200).json({
         message:'movie found!',
-        elem
+        movie
     });
 });
 
 router.put('/', (req,res)=>{
     //get data from request
-    const name=req.body;
+    const {name}=req.body;
     //creat new id
     const id= _.uniqueId();
     // insert in array
     movies.push({name, id});
     //return message
-    res.json({
-        message: `just added ${id}`,
-        name: {name,id}
+    res.json({ movies
     });
-
 });
 
+router.post('/:id',(req,res)=>{
+    //get id of movie
+    const{id}=req.params;
+    //get the data of the movie to update
+    const{name}=req.body;
+    //find in bdd
+    const movieToUpdate = _.find(movies, ["id",id]);
+    //update data with new data
+    movieToUpdate.name=name;
+    //return message
+    res.json({
+        message:`Just update ${id} with ${name}`
+    });
+});
+
+router.delete('/:id', (req,res)=>{
+    //get id of movie
+    const {id}=req.params;
+    //remove frome bdd
+    _.remove(movies,["id",id]);
+    //return message
+    res.json({
+        message:`Just removed ${id}`,
+        movies
+    })
+})
 /*
 /// PUT
 app.put('/',(req,res)=>{
