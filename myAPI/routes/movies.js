@@ -6,9 +6,19 @@ API_URL="http://www.omdbapi.com/";
 API_KEY="d9e63691";
 
 var _ = require('lodash');
+/*
+const titles=null;
+const released=null;
+const runtime=null;
+const actors=null;
+const poster=null;
+const boxoffice=null;
+const ratings= null;*/
+let movies=[/*
+            {"Titles:":titles},
+            {"Released:":released},
+            {"Runtime:":runtime}*/
 
-
-let movies=[
 
 ]
 //GET with axios
@@ -47,11 +57,17 @@ router.get("/",(req,res,next)=>{
         const {title}= req.body;
         axios.get(`${API_URL}?t=${title}&apikey=${API_KEY}`).then(({data})=>{
             const id= _.uniqueId();
-            
-            const list=[id,data.Title,data.Released,data.Runtime
-               ,data.Actors, data.Poster, data.BoxOffice, data.Ratings[1].Value];
+            titles=data.Title;
+            released=data.Released;
+            runtime=data.Runtime;
+            actors=data.Actors;
+            poster=data.Poster;
+            boxoffice=data.BoxOffice;
+            rating=data.Ratings[1].Value;
+            const list={"id":id,"Title":titles,"Released":released,"Runtime":runtime,"Actors":actors,
+            "Posters":poster,"BoxOffice":boxoffice,"Ratings":rating}
             movies.push(list)
-            res.status(200).json({list, message:`movie ${title} added to the BD`})
+            res.status(200).json({movies, message:`movie ${title} added to the BD`})
          } );
         })
 
@@ -62,9 +78,9 @@ router.get("/",(req,res,next)=>{
             //find in bdd
             const movieToUpdate = _.find(movies, ["id",id]);
             //update data with new data
-            movieToUpdate=null;
+            movieToUpdate.Title=title;
 
-                res.status(200).json({list, message:`movie ${title} added to the BD`})
+                res.status(200).json({movies, message:`movie ${title} added to the BD`})
              
             })
 
