@@ -1,26 +1,86 @@
 const express = require('express');
 const router = express.Router();
+const axios = require("axios");
+
+API_URL="http://www.omdbapi.com/";
+API_KEY="d9e63691";
 
 var _ = require('lodash');
 
-//const hostname ="localhost";
-//const port = 3000;
 
-//let app=express();
-//let port =8080;
+let movies=[
 
-//Creat database
+]
+//GET with axios
+/*router.get("/",(req,res,next)=>{
+axios.get(`${API_URL}?t=inception&apikey=${API_KEY}`).then(data=>{
+    const id= _.uniqueId();
+    const {list}=data;
+    const movie= [id,list.Title,list.Released,list.Runtime
+    ,list.Actors, list.Poster, list.BosOffice, list.Ratings[2].value];
+    res.status(200).json({movie});
+});
+})*/
+
+/*
+//GET by name with axios
+router.get("/",(req,res,next)=>{
+    const {title}= req.body;
+    axios.get(`${API_URL}?t=${title}&apikey=${API_KEY}`).then(({data})=>{
+        const id= _.uniqueId();
+        
+        const list=[id,data.Title,data.Released,data.Runtime
+            ,data.Actors, data.Poster, data.BoxOffice, data.Ratings[1].Value];
+        res.status(200).json({movies})
+     } );
+    })
+*/
+
+//GET all the movies added
+router.get("/",(req,res,next)=>{
+
+        res.status(200).json({message:"Display of the BD", movies})
+    })
+
+    //PUT a new movie by name in "movies"
+    router.put("/",(req,res,next)=>{
+        const {title}= req.body;
+        axios.get(`${API_URL}?t=${title}&apikey=${API_KEY}`).then(({data})=>{
+            const id= _.uniqueId();
+            
+            const list=[id,data.Title,data.Released,data.Runtime
+               ,data.Actors, data.Poster, data.BoxOffice, data.Ratings[1].Value];
+            movies.push(list)
+            res.status(200).json({list, message:`movie ${title} added to the BD`})
+         } );
+        })
+
+        router.post("/:id",(req,res,next)=>{
+            //get id of movie
+            const{id}=req.params;
+            const {title}= req.body;
+            //find in bdd
+            const movieToUpdate = _.find(movies, ["id",id]);
+            //update data with new data
+            movieToUpdate=null;
+
+                res.status(200).json({list, message:`movie ${title} added to the BD`})
+             
+            })
+
+/*
+const hostname ="localhost";
+const port = 3000;
+
+let app=express();
+let port =8080;
 
 let movies = [{
     name: "Forrest Gump",
     id: "0"
-},
-{
-    name:"rpie",
-    id:"1"
 }];
 
-//GET
+//GET with router
 router.get('/', (req,res)=>{
     res.status(200).json({movies})
 });
@@ -34,6 +94,7 @@ router.get('/:id',(req,res)=>{
         movie
     });
 });
+*/
 
 router.put('/', (req,res)=>{
     //get data from request
@@ -73,31 +134,4 @@ router.delete('/:id', (req,res)=>{
         movies
     })
 })
-/*
-/// PUT
-app.put('/',(req,res)=>{
-    res.json({
-movies
-    });
-});
-
-app.listen(port,()=> {
-    console.log('le serveur foctionne')
-})
-*/
-/*
-// GET
-router.get('/', (req,res)=>{
-    res.status(200).json({movies});
-});
-
-/// PUT 
-router.put('/', function(req,res, next){
-    res.send('respond with a resource')
-});
-
-*/
-
-/*
-*/
 module.exports =router;
