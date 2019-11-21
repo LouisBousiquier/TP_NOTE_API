@@ -47,25 +47,37 @@ router.get("/",(req,res,next)=>{
 */
 
 //GET all the movies added
+
+
+
 router.get("/",(req,res,next)=>{
 
-        res.status(200).json({message:"Display of the BD", movies})
-    })
+    res.status(200).json({message:"Display of the BD", movies})
+})
+//GET for une movie with the id specified
+    router.get("/:id",(req,res,next)=>{
+        const { id } = req.params;
+        const movie= _.find(movies, ["id",id]);
+        res.status(200).json({
+            message:'movie found!',
+            movie
+        });
+    });
 
     //PUT a new movie by name in "movies"
     router.put("/",(req,res,next)=>{
         const {title}= req.body;
         axios.get(`${API_URL}?t=${title}&apikey=${API_KEY}`).then(({data})=>{
             const id= _.uniqueId();
-            titles=data.Title;
-            released=data.Released;
-            runtime=data.Runtime;
-            actors=data.Actors;
-            poster=data.Poster;
-            boxoffice=data.BoxOffice;
-            rating=data.Ratings[1].Value;
+           const titles=data.Title;
+           const released=data.Released;
+           const runtime=data.Runtime;
+           const actors=data.Actors;
+           const poster=data.Poster;
+           const boxoffice=data.BoxOffice;
+           const rating=data.Ratings[1].Value;
             const list={"id":id,"Title":titles,"Released":released,"Runtime":runtime,"Actors":actors,
-            "Posters":poster,"BoxOffice":boxoffice,"Ratings":rating}
+            "Posters":poster,"BoxOffice":boxoffice,"Ratings":rating};
             movies.push(list)
             res.status(200).json({movies, message:`movie ${title} added to the BD`})
          } );
@@ -111,6 +123,7 @@ router.get('/:id',(req,res)=>{
     });
 });
 */
+/*
 
 router.put('/', (req,res)=>{
     //get data from request
@@ -149,5 +162,5 @@ router.delete('/:id', (req,res)=>{
         message:`Just removed ${id}`,
         movies
     })
-})
+})*/
 module.exports =router;
